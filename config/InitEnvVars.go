@@ -10,7 +10,9 @@ var EnvVars EnvConfig
 type EnvConfig struct {
 	Environment string `env:"ENVIRONMENT"`
 	AppPort     string `env:"PORT"`
-	DbConnUrl   string `env:"POSTGRES_SQL_CONNECTION_STRING"`
+	DbUser      string `env:"DB_USERNAME"`
+	DbPassword  string `env:"DB_PASSWORD"`
+	DbName      string `env:"DB_NAME"`
 }
 
 func LoadEnvVars() {

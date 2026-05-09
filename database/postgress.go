@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -22,7 +23,9 @@ func (client *Client) Select(dest interface{}, query string, args ...interface{}
 	return client.db.Select(dest, query, args...)
 }
 
-func NewPgClient(pgConnectionString string) (*Client, error) {
+func NewPgClient(db_user, db_password, db_name string) (*Client, error) {
+	pgConnectionString := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", db_user, db_password, db_name)
+
 	db, err := sqlx.Connect("postgres", pgConnectionString)
 	if err != nil {
 		return nil, err

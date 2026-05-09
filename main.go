@@ -10,7 +10,7 @@ func main() {
 	config.LoadEnvVars()
 	config.InitializeLogger()
 
-	dbClient, err := database.NewPgClient(config.EnvVars.DbConnUrl)
+	dbClient, err := database.NewPgClient(config.EnvVars.DbUser, config.EnvVars.DbPassword, config.EnvVars.DbName)
 	if err != nil {
 		config.ZapLogger.Panic("unable to connect database: " + err.Error())
 	}
