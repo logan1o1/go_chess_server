@@ -3,8 +3,8 @@ version: v1.0
 name: Chess backend
 agent:
   machine:
-    type: e1-standard-2
-    os_image: ubuntu2004
+    type: a2-standard-4
+    os_image: ubuntu2204
 
 # Blocks are the heart of a pipeline and are executed sequentially.
 # Each block has a task that defines one or more jobs. Jobs define the
