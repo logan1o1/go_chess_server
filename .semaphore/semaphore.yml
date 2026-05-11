@@ -2,7 +2,7 @@ version: v1.0
 name: Chess backend
 agent:
   machine:
-    type: a2-standard-4
+    type: e2-standard-4
     os_image: ubuntu2204
 
 # Blocks are the heart of a pipeline and are executed sequentially.
@@ -15,10 +15,7 @@ blocks:
       jobs:
       - name: go get & build
         commands:
-          - checkout
-
-          # Set version of Go:
-          - sem-version go 1.28
+          - sem-version go 1.26
           - go get
           - go build -o ./bin/main
 
