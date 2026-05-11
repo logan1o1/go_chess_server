@@ -16,7 +16,6 @@ blocks:
       - name: go get & build
         commands:
           - sem-version go 1.26
-          - go get
           - go build -o ./bin/main
 
           # Store the binary in cache to reuse in further blocks.
@@ -39,7 +38,7 @@ blocks:
           # See https://docs.semaphoreci.com/ci-cd-environment/sem-service-managing-databases-and-services-on-linux/
           - sem-service start postgres
           - psql -p 5432 -h localhost -U postgres -c "CREATE DATABASE s2"
-          - go get gotest.tools/gotestsum
+          - go install gotest.tools/gotestsum
           - gotestsum --junitfile junit.xml ./...
 
       - name: Test web server
