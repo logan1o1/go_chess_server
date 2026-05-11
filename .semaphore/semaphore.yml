@@ -13,8 +13,9 @@ blocks:
   - name: Build project
     task:
       jobs:
-      - name: go get & build
+      - name: go build
         commands:
+          - checkout
           - sem-version go 1.26
           - go build -o ./bin/main
 
