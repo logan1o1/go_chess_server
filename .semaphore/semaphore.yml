@@ -18,9 +18,6 @@ blocks:
           - checkout
           - sem-version go 1.26
           - go build -o ./bin/main
-
-          # Store the binary in cache to reuse in further blocks.
-          # More about caching: https://docs.semaphoreci.com/article/54-toolbox-reference#cache
           - cache store $(checksum main.go) bin
 
   - name: Run tests
@@ -39,7 +36,7 @@ blocks:
           # See https://docs.semaphoreci.com/ci-cd-environment/sem-service-managing-databases-and-services-on-linux/
           - sem-service start postgres
           - psql -p 5432 -h localhost -U postgres -c "CREATE DATABASE s2"
-          - go install gotest.tools/gotestsum
+          - go get gotest.tools/gotestsum
           - gotestsum --junitfile junit.xml ./...
 
       - name: Test web server
