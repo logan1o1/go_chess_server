@@ -1,0 +1,42 @@
+version: v1.0
+name: Chess backend
+agent:
+  machine:
+    type: f1-standard-4
+    os_image: ubuntu2204
+
+blocks:
+  - name: Build project
+    task:
+      jobs:
+      - name: go build
+        commands:
+          - checkout
+          - sem-version go 1.26
+          - go build -o ./bin/main
+          - cache store $(checksum main.go) bin
+
+  - name: Run tests
+    task:
+      # See https://docs.semaphoreci.com/article/50-pipeline-yaml#prologue
+      prologue:
+        commands:
+          - checkout
+          - sem-version go 1.26
+      jobs:
+      - name:  go test 
+        commands:
+          # See https://docs.semaphoreci.com/ci-cd-environment/sem-service-managing-databases-and-services-on-linux/
+          - sem-service start postgres
+          - psql -p 5432 -h localhost -U postgres -c "CREATE DATABASE chess_db"
+          - go test ./... -v
+
+      - name: Test web server
+        commands:
+          - sem-service start postgres
+          - sleep 2
+          - psql -p 5432 -h localhost -U postgres -c "CREATE DATABASE chess_db"
+          - cache restore $(checksum main.go)
+          - ./bin/main 8080 &
+          - sleep 1
+          - curl --silent localhost:8080/healthcheck | grep "ok"
