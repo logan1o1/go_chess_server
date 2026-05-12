@@ -24,7 +24,7 @@ blocks:
           - checkout
           - sem-version go 1.26
       jobs:
-      - name:  go test ./... -v
+      - name:  go test 
         commands:
           # See https://docs.semaphoreci.com/ci-cd-environment/sem-service-managing-databases-and-services-on-linux/
           - sem-service start postgres
@@ -33,6 +33,8 @@ blocks:
 
       - name: Test web server
         commands:
+          - sem-service start postgres
+          - psql -p 5432 -h localhost -U postgres -c "CREATE DATABASE chess_db"
           - cache restore $(checksum main.go)
           - ./bin/main 8080 &
           - curl --silent localhost:8080/healthcheck | grep "ok"
