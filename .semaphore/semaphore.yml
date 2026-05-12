@@ -36,23 +36,18 @@ blocks:
           # See https://docs.semaphoreci.com/ci-cd-environment/sem-service-managing-databases-and-services-on-linux/
           - sem-service start postgres
           - psql -p 5432 -h localhost -U $DB_USERNAME -c "CREATE DATABASE $DB_NAME"
-          - go install gotest.tools/gotestsum@latest
-          - gotestsum --junitfile junit.xml ./...
+          - go test ./... -v
 
       - name: Test web server
         commands:
           # Restore compiled binary which we created in the first block:
           - cache restore $(checksum main.go)
           - ./bin/main $PORT &
-          - curl --silent localhost:8080/time | grep "The current time is"
-      epilogue:
-        always:
-          commands:
-            - test-results publish junit.xml
+          - curl --silent localhost:8080/healthcheck | grep "ok"
 
-after_pipeline:
-  task:
-    jobs:
-      - name: Publish Results
-        commands:
-          - test-results gen-pipeline-report
+# after_pipeline:
+#   task:
+#     jobs:
+#       - name: Publish Results
+#         commands:
+#           - test-results gen-pipeline-report
