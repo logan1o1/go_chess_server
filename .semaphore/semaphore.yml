@@ -33,15 +33,8 @@ blocks:
 
       - name: Test web server
         commands:
+          - cache restore $(checksum main.go)
           - sem-service start postgres
           - psql -p 5432 -h localhost -U postgres -c "CREATE DATABASE chess_db"
-          - cache restore $(checksum main.go)
           - ./bin/main 8080 &
           - curl --silent localhost:8080/healthcheck | grep "ok"
-
-# after_pipeline:
-#   task:
-#     jobs:
-#       - name: Publish Results
-#         commands:
-#           - test-results gen-pipeline-report
