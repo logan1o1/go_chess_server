@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	_ "github.com/lib/pq"
 	"github.com/logan1o1/go_chess_server/config"
 	"github.com/logan1o1/go_chess_server/database"
@@ -8,17 +10,19 @@ import (
 
 func main() {
 	config.LoadEnvVars()
-	config.InitializeLogger()
 
-	dbClient, err := database.NewPgClient(config.EnvVars.DbUser, config.EnvVars.DbPassword, config.EnvVars.DbName)
+	dbClient, err := database.NewPgClient(
+		config.EnvVars.DbUser,
+		config.EnvVars.DbPassword,
+		config.EnvVars.DbName)
 	if err != nil {
-		config.ZapLogger.Panic("unable to connect database: " + err.Error())
+		log.Panic("Unable to connect to database" + err.Error())
 	}
 
-	app := InitRouter(dbClient)
+	app := InitSshServer(dbClient)
 
-	err = app.Run(":" + config.EnvVars.AppPort)
+	err = app.ListenAndServe()
 	if err != nil {
-		config.ZapLogger.Panic("Unable to start the server: " + err.Error())
+		log.Panic("Unable to start the server: " + err.Error())
 	}
 }
