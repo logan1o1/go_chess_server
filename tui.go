@@ -4,19 +4,8 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/ssh"
+	"github.com/logan1o1/go_chess_server/view"
 )
-
-func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
-	pty, _, _ := s.Pty()
-	m := model{
-		term:   pty.Term,
-		width:  pty.Window.Width,
-		height: pty.Window.Height,
-		bg:     "light",
-	}
-
-	return m, []tea.ProgramOption{}
-}
 
 type model struct {
 	term      string
@@ -25,12 +14,38 @@ type model struct {
 	height    int
 	bg        string
 	quitStyle lipgloss.Style
+	board     [8][8]view.Square
 }
 
 func (m model) Init() tea.Cmd {
 	return tea.Batch(
 		tea.RequestBackgroundColor,
 	)
+}
+
+func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
+	pty, _, _ := s.Pty()
+	var board [8][8]view.Square
+
+	for r := range 8 {
+		for c := range 8 {
+			board[r][c] = view.Square{
+				Piece: "",
+				Light: (r+c)%2 == 0,
+			}
+		}
+
+	}
+
+	m := model{
+		term:   pty.Term,
+		width:  pty.Window.Width,
+		height: pty.Window.Height,
+		bg:     "light",
+		board:  board,
+	}
+
+	return m, []tea.ProgramOption{}
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -54,7 +69,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() tea.View {
-	v := tea.NewView(m.quitStyle.Render("Press 'q' to quit\n"))
+	v := tea.NewView(
+		lipgloss.JoinVertical(
+			lipgloss.Top,
+			view.HowToQuit(),
+			view.RenderChessBoard(m.board),
+		),
+	)
 	v.AltScreen = true
+
 	return v
 }
