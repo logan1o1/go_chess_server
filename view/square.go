@@ -12,17 +12,11 @@ type Square struct {
 func (s Square) Render(cellWidth, cellHeight int) string {
 	bg := lipgloss.Black
 
-	if s.Light {
-		bg = lipgloss.White
-	}
+	if s.Light { bg = lipgloss.White }
 
-	if s.CorrectHighlight {
-		bg = lipgloss.Green
-	}
+	if s.CorrectHighlight { bg = lipgloss.Green }
 
-	if s.WrongHighlight {
-		bg = lipgloss.Red
-	}
+	if s.WrongHighlight { bg = lipgloss.Red }
 
 	cell := lipgloss.NewStyle().
 		Width(cellWidth).Height(cellHeight).

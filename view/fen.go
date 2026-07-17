@@ -2,7 +2,7 @@ package view
 
 import "strings"
 
-func parseFen(fen string) *[8][8]string {
+func ParseFEN(fen string) *[8][8]string {
 	var board [8][8]string
 	ranks := strings.Split(fen, "/")
 	for r, rank := range ranks {

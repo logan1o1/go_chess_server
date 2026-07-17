@@ -27,10 +27,11 @@ func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
 	pty, _, _ := s.Pty()
 	var board [8][8]view.Square
 
+	pieces := *view.ParseFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
 	for r := range 8 {
 		for c := range 8 {
 			board[r][c] = view.Square{
-				Piece: "",
+				Piece: pieces[r][c],
 				Light: (r+c)%2 == 0,
 			}
 		}
