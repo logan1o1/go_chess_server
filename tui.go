@@ -15,6 +15,7 @@ type model struct {
 	bg        string
 	quitStyle lipgloss.Style
 	board     [8][8]view.Square
+	chatPanel view.ChatPannel
 }
 
 func (m model) Init() tea.Cmd {
@@ -70,13 +71,21 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() tea.View {
-	v := tea.NewView(
-		lipgloss.JoinVertical(
+	chatWidth := m.width / 3
+	boardwidth := m.width - chatWidth
+
+	boardView := lipgloss.JoinVertical(
 			lipgloss.Top,
 			view.HowToQuit(),
-			view.RenderChessBoard(m.board),
-		),
+			view.RenderChessBoard(m.board, boardwidth),
+		)
+
+	chatView := m.chatPanel.RenderChatPannel(chatWidth, m.height - 1)
+
+	v := tea.NewView(
+		lipgloss.JoinHorizontal(lipgloss.Top, boardView, chatView),
 	)
+
 	v.AltScreen = true
 
 	return v

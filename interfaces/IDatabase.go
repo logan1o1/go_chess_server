@@ -5,7 +5,7 @@ import (
 )
 
 type IDatabase interface {
-	Execute(query string, args ...interface{}) (sql.Result, error)
-	Get(dest interface{}, query string, args ...interface{}) error
-	Select(dest interface{}, query string, args ...interface{}) error
+	Execute(query string, args ...any) (sql.Result, error)
+	Get(dest any, query string, args ...any) error
+	Select(dest any, query string, args ...any) error
 }

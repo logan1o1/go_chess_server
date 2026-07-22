@@ -11,15 +11,15 @@ type Client struct {
 	db *sqlx.DB
 }
 
-func (client *Client) Execute(query string, args ...interface{}) (sql.Result, error) {
+func (client *Client) Execute(query string, args ...any) (sql.Result, error) {
 	return client.db.Exec(query, args...)
 }
 
-func (client *Client) Get(dest interface{}, query string, args ...interface{}) error {
+func (client *Client) Get(dest any, query string, args ...any) error {
 	return client.db.Get(dest, query, args...)
 }
 
-func (client *Client) Select(dest interface{}, query string, args ...interface{}) error {
+func (client *Client) Select(dest any, query string, args ...any) error {
 	return client.db.Select(dest, query, args...)
 }
 
