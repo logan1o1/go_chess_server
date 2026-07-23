@@ -12,7 +12,7 @@ func (c ChatPannel) RenderChatPannel(pannelWidth, pannelHeight int) string {
 	outputHeight := pannelHeight - inputHeight
    	
 	outputStyle := lipgloss.NewStyle().
-			Width(pannelWidth).Height(outputHeight).
+		        Width(pannelWidth).Height(outputHeight).
 			Border(lipgloss.NormalBorder()).
 		 	Align(lipgloss.Right, lipgloss.Top).
 			Render(c.Transcript)
