@@ -1,5 +1,5 @@
 package view
 
-func RenderMainPage()  {
-	
+func RenderMainPage() string {
+	return ""
 }

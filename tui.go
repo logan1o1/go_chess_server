@@ -71,5 +71,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() tea.View {
-	return view.RenderGamePage(m.width, m.height, m.chatPanel, m.board)
+	gamePage := view.RenderGamePage(m.width, m.height, m.chatPanel, m.board)
+
+	v := tea.NewView(
+		lipgloss.JoinVertical(lipgloss.Top, gamePage),
+	)
+
+	v.AltScreen = true
+
+	return v
 }

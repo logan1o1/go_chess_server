@@ -1,11 +1,10 @@
 package view
 
 import (
-	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 )
 
-func RenderGamePage(width, height int, chatPanel ChatPannel, board [8][8]Square) tea.View {
+func RenderGamePage(width, height int, chatPanel ChatPannel, board [8][8]Square) string {
 	chatWidth := width / 3
 	boardwidth := width - chatWidth
 
@@ -13,7 +12,6 @@ func RenderGamePage(width, height int, chatPanel ChatPannel, board [8][8]Square)
 
 	boardContent := lipgloss.JoinVertical(
 			lipgloss.Top,
-			HowToQuit(),
 			RenderChessBoard(board, boardwidth),
 		)
 
@@ -21,11 +19,7 @@ func RenderGamePage(width, height int, chatPanel ChatPannel, board [8][8]Square)
 
 	chatView := chatPanel.RenderChatPannel(chatWidth, height - 1)
 
-	v := tea.NewView(
-		lipgloss.JoinHorizontal(lipgloss.Top, boardView, chatView),
-	)
+	gamePage := lipgloss.JoinHorizontal(lipgloss.Top, boardView, chatView)
 
-	v.AltScreen = true
-
-	return v
+	return gamePage
 }
