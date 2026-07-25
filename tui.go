@@ -71,22 +71,5 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() tea.View {
-	chatWidth := m.width / 3
-	boardwidth := m.width - chatWidth
-
-	boardView := lipgloss.JoinVertical(
-			lipgloss.Top,
-			view.HowToQuit(),
-			view.RenderChessBoard(m.board, boardwidth),
-		)
-
-	chatView := m.chatPanel.RenderChatPannel(chatWidth, m.height - 1)
-
-	v := tea.NewView(
-		lipgloss.JoinHorizontal(lipgloss.Top, boardView, chatView),
-	)
-
-	v.AltScreen = true
-
-	return v
+	return view.RenderGamePage(m.width, m.height, m.chatPanel, m.board)
 }
